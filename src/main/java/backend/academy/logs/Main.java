@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.nio.file.InvalidPathException;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -74,7 +75,7 @@ public class Main {
                     List<String> filenames = new ArrayList<>();
 
                     for (FileView file : files) {
-                        collectLogsFromFile(file, parser, filters, filenames, collector, cmd);
+                        collectLogsFromFile(file, parser, filters, filenames, collector);
                     }
 
                     FormaterAdditionalData additionalData = new FormaterAdditionalData(filenames, filters);
@@ -98,8 +99,7 @@ public class Main {
         LogParser parser,
         List<LogFilter> filters,
         List<String> filenames,
-        StatisticCollector collector,
-        JCommander cmd
+        StatisticCollector collector
     ) {
         try (Stream<String> lines = file.getContent()) {
             Stream<LogRecord> logs = parser.parse(lines);
@@ -109,7 +109,7 @@ public class Main {
             filenames.add(file.name());
             logs.forEach(collector::addLog);
         } catch (ParseException e) {
-            errorAndUsage(cmd, String.format("Bad logs in file %s: ", file.name()), e);
+            System.err.printf("Bad logs in file %s: %s%n", file.name(), e.getMessage());
         }
     }
 
@@ -136,7 +136,7 @@ public class Main {
     private static LogProvider getProvider(String src) {
         try {
             return UrlLogProvider.create(src);
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | URISyntaxException | IllegalArgumentException e) {
             return FileLogProvider.create(".", src);
         }
     }

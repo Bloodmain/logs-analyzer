@@ -2,6 +2,7 @@ package backend.academy.logs.provider;
 
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import org.apache.commons.io.function.Uncheck;
@@ -13,8 +14,8 @@ public class UrlLogProvider implements LogProvider {
         this.url = url;
     }
 
-    public static UrlLogProvider create(String url) throws MalformedURLException {
-        return new UrlLogProvider(URI.create(url).toURL());
+    public static UrlLogProvider create(String url) throws MalformedURLException, URISyntaxException {
+        return new UrlLogProvider(new URI(url).toURL());
     }
 
     @Override
