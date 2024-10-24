@@ -82,14 +82,6 @@
     </properties>
 
     <dependencies>
-        <!-- Spring for HttpStatus -->
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>6.1.14</version>
-        </dependency>
-
         <!-- Core -->
         <dependency>
             <groupId>org.jspecify</groupId>

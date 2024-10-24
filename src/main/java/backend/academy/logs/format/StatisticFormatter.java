@@ -7,9 +7,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.springframework.http.HttpStatus;
 
 public abstract class StatisticFormatter {
+    private static final Map<Integer, String> HTTP_STATUS_NAMES = Map.ofEntries(
+        Map.entry(200, "OK"),
+        Map.entry(201, "Created"),
+        Map.entry(202, "Accepted"),
+        Map.entry(204, "No Content"),
+        Map.entry(301, "Moved Permanently"),
+        Map.entry(302, "Found"),
+        Map.entry(303, "See Other"),
+        Map.entry(304, "Not Modified"),
+        Map.entry(307, "Temporary Redirect"),
+        Map.entry(308, "Permanent Redirect"),
+        Map.entry(400, "Bad Request"),
+        Map.entry(401, "Unauthorized"),
+        Map.entry(403, "Forbidden"),
+        Map.entry(404, "Not Found"),
+        Map.entry(405, "Method Not Allowed"),
+        Map.entry(408, "Request Timeout"),
+        Map.entry(409, "Conflict"),
+        Map.entry(410, "Gone"),
+        Map.entry(415, "Unsupported Media Type"),
+        Map.entry(429, "Too Many Requests"),
+        Map.entry(500, "Internal Server Error"),
+        Map.entry(501, "Not Implemented"),
+        Map.entry(502, "Bad Gateway"),
+        Map.entry(503, "Service Unavailable"),
+        Map.entry(504, "Gateway Timeout")
+    );
+
     private static final Comparator<Map.Entry<?, Integer>> ENTRY_VALUES_COMPARATOR =
         Comparator.<Map.Entry<?, Integer>>comparingInt(Map.Entry::getValue).reversed();
 
@@ -115,11 +142,7 @@ public abstract class StatisticFormatter {
     }
 
     private static String getStatusName(int status) {
-        try {
-            return HttpStatus.valueOf(status).name();
-        } catch (IllegalArgumentException e) {
-            return "-";
-        }
+        return HTTP_STATUS_NAMES.getOrDefault(status, "-");
     }
 
     protected abstract String formatTable(List<List<String>> rows);
