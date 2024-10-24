@@ -143,6 +143,6 @@ public class StatisticCollectorTest {
     public void testEmptyPercentile() {
         StatisticCollector collector = new StatisticCollector();
 
-        assertThat(collector.percentile(95)).isEqualTo(Optional.empty());
+        assertThat(collector.percentile(95)).isEmpty()
     }
 }
